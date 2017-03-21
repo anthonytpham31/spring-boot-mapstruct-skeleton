@@ -1,5 +1,8 @@
 package cooksys.entity.embeddable;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Profile {
 	
 	private String firstName;

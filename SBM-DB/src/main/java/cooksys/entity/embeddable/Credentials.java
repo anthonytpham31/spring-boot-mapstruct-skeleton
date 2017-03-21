@@ -1,8 +1,10 @@
 package cooksys.entity.embeddable;
 
 import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 
+@Embeddable
 public class Credentials {
 	
 	@NotNull
@@ -12,4 +14,12 @@ public class Credentials {
 	@NotNull
 	@Column(nullable = false)
 	private String password;
+
+	
+	
+	public Credentials() {
+		
+	}
+	
+	
 }

@@ -1,27 +1,36 @@
 package cooksys.entity;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import cooksys.entity.embeddable.Credentials;
 import cooksys.entity.embeddable.Profile;
 import cooksys.entity.superclass.BaseEntity;
 
 @Entity
+@Table(name = "people")
 public class Users implements BaseEntity<Long> {
 	
+	@Id
+	@GeneratedValue
 	private Long id;
 	
+	@NotNull
 	private String username;
 	
-	private Profile profile;
+	@NotNull
+	private Profile userProfile;
 	
-	@Column(name = "timestamp")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date timestamp;
+	@Column(name = "Date Created")
+	private Timestamp timestamp;
+	
+	private Credentials userCreds;
 
 	public Long getId() {
 		return id;
