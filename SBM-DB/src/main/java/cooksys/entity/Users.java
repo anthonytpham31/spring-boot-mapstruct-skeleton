@@ -21,10 +21,6 @@ public class Users implements BaseEntity<Long> {
 	@GeneratedValue
 	private Long id;
 	
-	@NotNull
-	private String username;
-	
-	@NotNull
 	private Profile userProfile;
 	
 	@Column(name = "Date Created")
