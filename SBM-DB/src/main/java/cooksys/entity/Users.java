@@ -3,12 +3,16 @@ package cooksys.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import cooksys.entity.embeddable.Credentials;
 import cooksys.entity.embeddable.Profile;
 import cooksys.entity.superclass.BaseEntity;
@@ -23,6 +27,7 @@ public class Users implements BaseEntity<Long> {
 	
 	private Profile userProfile;
 	
+	@CreationTimestamp
 	private Timestamp timestamp;
 	
 	private Credentials userCreds;

@@ -15,9 +15,8 @@ public class Profile {
 	private String last;
 	
 	@NotNull
-	private String email;
+	private String mail;
 	
-	@Min(9)
 	@Max(9)
 	private String phone;
 
@@ -36,13 +35,13 @@ public class Profile {
 	public void setLast(String last) {
 		this.last = last;
 	}
-
-	public String getEmail() {
-		return email;
+	
+	public String getMail() {
+		return mail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setMail(String mail) {
+		this.mail = mail;
 	}
 
 	public String getPhone() {
@@ -53,7 +52,48 @@ public class Profile {
 		this.phone = phone;
 	}
 
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((first == null) ? 0 : first.hashCode());
+		result = prime * result + ((last == null) ? 0 : last.hashCode());
+		result = prime * result + ((mail == null) ? 0 : mail.hashCode());
+		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Profile other = (Profile) obj;
+		if (first == null) {
+			if (other.first != null)
+				return false;
+		} else if (!first.equals(other.first))
+			return false;
+		if (last == null) {
+			if (other.last != null)
+				return false;
+		} else if (!last.equals(other.last))
+			return false;
+		if (mail == null) {
+			if (other.mail != null)
+				return false;
+		} else if (!mail.equals(other.mail))
+			return false;
+		if (phone == null) {
+			if (other.phone != null)
+				return false;
+		} else if (!phone.equals(other.phone))
+			return false;
+		return true;
+	}
 	
 	
 }

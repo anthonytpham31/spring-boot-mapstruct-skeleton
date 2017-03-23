@@ -12,9 +12,7 @@ public class UsersDto {
 	
 	private String email;
 	
-	private String phone;
-	
-	private Timestamp timestamp;
+	private String phoneNumber;
 
 	public String getUsername() {
 		return username;
@@ -48,20 +46,12 @@ public class UsersDto {
 		this.email = email;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public Timestamp getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Timestamp timestamp) {
-		this.timestamp = timestamp;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
 	@Override
@@ -71,8 +61,7 @@ public class UsersDto {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
-		result = prime * result + ((timestamp == null) ? 0 : timestamp.hashCode());
+		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -101,15 +90,10 @@ public class UsersDto {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
-		if (phone == null) {
-			if (other.phone != null)
+		if (phoneNumber == null) {
+			if (other.phoneNumber != null)
 				return false;
-		} else if (!phone.equals(other.phone))
-			return false;
-		if (timestamp == null) {
-			if (other.timestamp != null)
-				return false;
-		} else if (!timestamp.equals(other.timestamp))
+		} else if (!phoneNumber.equals(other.phoneNumber))
 			return false;
 		if (username == null) {
 			if (other.username != null)

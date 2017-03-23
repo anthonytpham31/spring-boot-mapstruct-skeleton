@@ -7,7 +7,7 @@ import org.mapstruct.Mappings;
 import cooksys.dto.UsersDto;
 import cooksys.entity.Users;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CredentialsMapper.class})
 public interface UsersMapper {
 	
 	@Mappings({

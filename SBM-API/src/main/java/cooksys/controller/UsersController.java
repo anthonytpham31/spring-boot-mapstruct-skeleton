@@ -26,23 +26,23 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = {"public", "users"})
 public class UsersController {
 	
-	private UsersService usersService;
+	private UsersService userService;
 	
-	public UsersController(UsersService usersService) {
+	public UsersController(UsersService userService) {
 		super();
-		this.usersService = usersService;
+		this.userService = userService;
 	}
 	
 	@GetMapping
 	@ApiOperation(value = "", nickname = "getAllUsers")
 	public List<UsersDto> index() {
-		return UsersService.index();
+		return userService.index();
 	}
 	
 	@PostMapping
 	@ApiOperation(value = "", nickname = "postUser")
-	public Long post(@RequestBody @Validated UsersDto usersDto, HttpServletResponse httpResponse) {
-		Long id = usersService.post(usersDto);
+	public Long post(@RequestBody UsersDto usersDto, HttpServletResponse httpResponse) {
+		Long id = userService.post(usersDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return id;
 	}
@@ -50,13 +50,13 @@ public class UsersController {
 	@GetMapping("@{username}")
 	@ApiOperation(value = "", nickname = "findUser")
 	public Long getUser(@PathVariable Long id) {
-		return usersService.getUser(id);
+		return userService.getUser(id);
 	}
 	
 	@PatchMapping("@{username}") // TODO
 	@ApiOperation(value = "", nickname = "patchUser")
 	public Long patchUser(@RequestBody @Validated UsersDto usersDto, HttpServletResponse httpResponse) {
-		Long id = usersService.patchUser(usersDto);
+		Long id = userService.patchUser(usersDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return id;
 	}
@@ -64,48 +64,48 @@ public class UsersController {
 	@DeleteMapping("@{username}") //TODO
 	@ApiOperation(value = "", nickname = "deleteUser")
 	public Long delete(@PathVariable Long id, HttpServletResponse httpResponse) {
-		return usersService.delete(id);
+		return userService.delete(id);
 	}
 	
 	@PostMapping("@{username}/follow") //TODO
 	@ApiOperation(value = "", nickname = "followUser")
 	public void followUser(@PathVariable @Validated UsersDto userDto, HttpServletResponse httpResponse) {
-		usersService.followUser(userDto);
+		userService.followUser(userDto);
 	}
 	
 	@PostMapping("@{username}/unfollow") //TODO
 	@ApiOperation(value = "", nickname = "unfollowUser")
 	public void unfollowUser(@PathVariable @Validated UsersDto userDto, HttpServletResponse httpResponse) {
-		usersService.unfollowUser(userDto);
+		userService.unfollowUser(userDto);
 	}
 	
 	@GetMapping("@{username}/feed") //TODO
 	@ApiOperation(value = "", nickname = "UserFeed")
 	public List<TweetDto> getUserFeed(@PathVariable UsersDto userDto) {
-		return usersService.getUserFeed(userDto);
+		return userService.getUserFeed(userDto);
 	}
 	
 	@GetMapping("@{username}/tweets") //TODO
 	@ApiOperation(value = "", nickname = "UserTweets")
 	public List<TweetDto> getUserTweets(@PathVariable UsersDto userDto) {
-		return usersService.getUserTweets(userDto);
+		return userService.getUserTweets(userDto);
 	}
 	
 	@GetMapping("@{username}/mentions") //TODO
 	@ApiOperation(value = "", nickname = "UserMentions")
 	public List<TweetDto> getUserMentions(@PathVariable UsersDto userDto) {
-		return usersService.getUserMentions(userDto);
+		return userService.getUserMentions(userDto);
 	}
 	
 	@GetMapping("@{username}/followers") //TODO
 	@ApiOperation(value = "", nickname = "Userfollowers")
 	public List<UsersDto> getUserFollowers(@PathVariable UsersDto userDto) {
-		return usersService.getUserFollowers(userDto);
+		return userService.getUserFollowers(userDto);
 	}
 	
 	@GetMapping("@{username}/following") //TODO
 	@ApiOperation(value = "", nickname = "UserFollowing")
 	public List<UsersDto> getUserFollowing(@PathVariable UsersDto userDto) {
-		return usersService.getUserFollowing(userDto);
+		return userService.getUserFollowing(userDto);
 	}
 }

@@ -35,18 +35,16 @@ public class UsersService {
 		return false;
 	}
 
-	public static List<UsersDto> index() {
-		return null;
-//		userRepository
-//				.findAll()
-//				.stream()
-//				.map(userMapper::toUsersDto)
-//				.collect(Collectors.toList());
+	public List<UsersDto> index() {
+		return userRepository
+				.findAll()
+				.stream()
+				.map(userMapper::toUsersDto)
+				.collect(Collectors.toList());
 	}
 
 	public Long post(UsersDto usersDto) {
-		// TODO Auto-generated method stub
-		return null;
+		return userRepository.save(userMapper.toUsers(usersDto)).getId();
 	}
 
 	public Long getUser(Long id) {
