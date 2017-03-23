@@ -9,5 +9,5 @@ import cooksys.entity.Users;
 
 public interface TweetRepository extends JpaRepository<Tweet, Long> {
 	
-	List<Tweet> findByDeletedTweet(Integer tracker);
+	List<Tweet> findByDeletedTweet(boolean tracker);
 }

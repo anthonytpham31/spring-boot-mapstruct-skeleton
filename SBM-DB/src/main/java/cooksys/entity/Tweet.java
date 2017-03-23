@@ -48,7 +48,7 @@ public class Tweet implements BaseEntity<Long>{
 	@ManyToMany(mappedBy = "userMentioned")
 	private List<Users> usersMentionedInTweet;
 	
-	private Integer deletedTweet;
+	private boolean deletedTweet;
 
 	public Long getId() {
 		return id;
@@ -82,14 +82,30 @@ public class Tweet implements BaseEntity<Long>{
 		this.inReplyTo = inReplyTo;
 	}
 	
-	public Integer isDeletedTweet() {
+	public List<Tweet> getAllReplies() {
+		return allReplies;
+	}
+
+	public void setAllReplies(List<Tweet> allReplies) {
+		this.allReplies = allReplies;
+	}
+
+	public List<Tweet> getAllReposts() {
+		return allReposts;
+	}
+
+	public void setAllReposts(List<Tweet> allReposts) {
+		this.allReposts = allReposts;
+	}
+
+	public boolean isDeletedTweet() {
 		return deletedTweet;
 	}
 
-	public void setDeletedTweet(Integer deletedTweet) {
+	public void setDeletedTweet(boolean deletedTweet) {
 		this.deletedTweet = deletedTweet;
 	}
-	
+
 	public List<Users> getUsersMentionedInTweet() {
 		return usersMentionedInTweet;
 	}

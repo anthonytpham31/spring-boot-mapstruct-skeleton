@@ -36,28 +36,27 @@ public class TweetController {
 	
 	@GetMapping
 	@ApiOperation(value = "", nickname = "getAllTweets")
-	public List<TweetDto> index() {
+	public List<DisplayDto> index() {
 		return tweetService.index();
 	}
 	
 	@GetMapping("{id}")
 	@ApiOperation(value = "", nickname = "findTweet")
-	public TweetDto get(@PathVariable Long id) {
+	public DisplayDto get(@PathVariable Long id) {
 		return tweetService.get(id);
 	}
 	
 	@PostMapping
 	@ApiOperation(value = "", nickname = "postTweet")
 	public DisplayDto post(@RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
-		tweetService.post(tweetDto);
+		DisplayDto body = tweetService.post(tweetDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
-		 
-		return null;
+		return body;
 	}
 	
 	@DeleteMapping("{id}")
 	@ApiOperation(value = "", nickname = "deleteTweet")
-	public Long delete(@PathVariable Long id, HttpServletResponse httpResponse) {
+	public DisplayDto delete(@PathVariable Long id, HttpServletResponse httpResponse) {
 		return tweetService.delete(id);
 	}
 	

@@ -7,11 +7,13 @@ import org.springframework.stereotype.Service;
 
 import cooksys.component.ServiceUtilities;
 import cooksys.component.ServiceUtilities.IdChecker;
+import cooksys.dto.CredentialsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
 import cooksys.entity.Users;
-import cooksys.mapper.UsersCreationMapper;
+import cooksys.entity.embeddable.Credentials;
+import cooksys.entity.embeddable.Profile;
 import cooksys.mapper.UsersMapper;
 import cooksys.repository.UsersRepository;
 
@@ -20,15 +22,13 @@ public class UsersService {
 
 	private final UsersRepository userRepository;
 	private final UsersMapper userMapper;
-	private final UsersCreationMapper userCreationMapper;
 	private final ServiceUtilities serviceUtilities;
 	private final IdChecker idChecker;
 	
-	public UsersService(UsersRepository userRepository, UsersMapper userMapper, UsersCreationMapper userCreationMapper, ServiceUtilities serviceUtilities) {
+	public UsersService(UsersRepository userRepository, UsersMapper userMapper, ServiceUtilities serviceUtilities) {
 		super();
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
-		this.userCreationMapper = userCreationMapper;
 		this.serviceUtilities = serviceUtilities;
 		this.idChecker = serviceUtilities.buildIdChecker(Users.class, this::has);
 	}
@@ -41,16 +41,16 @@ public class UsersService {
 
 	public List<UsersDto> index() {
 		return userRepository
-				.findByDeletedUsers(0)
+				.findByDeletedUsers(false)
 				.stream()
 				.map(userMapper::toUsersDto)
 				.collect(Collectors.toList());
 	}
 
-	public Long post(UsersCreationDto usersDto) {
-		Users newUser = userCreationMapper.toUsers(usersDto);
-		newUser.setDeletedUsers(0);
-		return userRepository.saveAndFlush(newUser).getId();
+	public UsersDto post(UsersCreationDto usersDto) {
+		Users newUser = userMapper.fromCreation(usersDto);
+		newUser.setDeletedUsers(false);
+		return userMapper.toUsersDto(userRepository.saveAndFlush(newUser));
 	}
 
 	public UsersDto getUser(String username) {
@@ -58,14 +58,22 @@ public class UsersService {
 		
 	}
 
-	public UsersDto patchUser(UsersCreationDto usersDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsersDto patchUser(Credentials creds, Profile profile) {
+		
+		Users newUser = userRepository.findByUserCredsName(creds.getName());
+		if(newUser != null){
+			newUser.setUserProfile(profile);
+			return userMapper.toUsersDto(userRepository.saveAndFlush(newUser));
+		} else {
+			return null;
+		}
+			
 	}
 
-	public Long delete(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsersDto delete(String userName) {
+		Users newUser = userRepository.findByUserCredsName(userName);
+		newUser.setDeletedUsers(true);
+		return userMapper.toUsersDto(userRepository.saveAndFlush(newUser));
 	}
 
 	public void followUser(UsersDto userDto) {

@@ -37,30 +37,30 @@ public class TweetService {
 		return false;
 	}
 	
-	public List<TweetDto> index() {
+	public List<DisplayDto> index() {
 		return tweetRepository
-				.findAll()
+				.findByDeletedTweet(false)
 				.stream()
-				.map(tweetMapper::toTweetDto)
+				.map(tweetMapper::toDisplayDto)
 				.collect(Collectors.toList());
 	}
 
-	public TweetDto get(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public DisplayDto get(Long id) {
+		return tweetMapper.toDisplayDto(tweetRepository.findOne(id));
 	}
 
 	public DisplayDto post(TweetDto tweetDto) {
 		Tweet newTweet = tweetMapper.toTweet(tweetDto);
+		newTweet.setDeletedTweet(false);
 		// TODO Mentions & Hashtags (insert in constructor)
-		tweetRepository.saveAndFlush(newTweet);
-		return null;
+		return tweetMapper.toDisplayDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
-	public Long delete(Long id) {
-		return null;
-		// TODO Auto-generated method stub
-		
+	public DisplayDto delete(Long id) {
+		Tweet newTweet = tweetRepository.findOne(id);
+		newTweet.setDeletedTweet(true);
+		return tweetMapper.toDisplayDto(tweetRepository.saveAndFlush(newTweet));
+
 	}
 
 	public void likeTweet(Long id) {

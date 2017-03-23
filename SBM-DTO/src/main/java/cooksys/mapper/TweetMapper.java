@@ -8,7 +8,6 @@ import cooksys.dto.DisplayDto;
 import cooksys.dto.ReplyDto;
 import cooksys.dto.RepostDto;
 import cooksys.dto.TweetDto;
-import cooksys.dto.UsersDto;
 import cooksys.entity.Tweet;
 
 @Mapper(componentModel = "spring", uses = {UsersMapper.class, CredentialsMapper.class})
@@ -24,6 +23,9 @@ public interface TweetMapper {
 	})
 	Tweet toTweet(TweetDto tweetDto);
 	
+	
+	// DisplayDto
+	
 	@Mappings({
 		@Mapping(source = "id", target = "id"),
 		@Mapping(source = "author", target = "author"),
@@ -34,6 +36,7 @@ public interface TweetMapper {
 	
 	@Mappings({
 		@Mapping(source = "content", target = "content")
+		//@Mapping(source = "credentials.username", target = "author")
 	})
 	DisplayDto fromTweetDto(TweetDto tweetDto);
 	
@@ -45,6 +48,8 @@ public interface TweetMapper {
 	})
 	Tweet fromDisplayDto(DisplayDto displayDto);
 	
+	// ReplyDto
+	
 	@Mappings({
 		@Mapping(source = "id", target = "reply.id"),
 		@Mapping(source = "author", target = "reply.author"),
@@ -52,6 +57,8 @@ public interface TweetMapper {
 		@Mapping(source = "content", target = "reply.content")
 	})
 	ReplyDto toReplyDto(Tweet tweet);
+	
+	// RepostDto
 	
 	@Mappings({
 		@Mapping(source = "id", target = "repost.id"),

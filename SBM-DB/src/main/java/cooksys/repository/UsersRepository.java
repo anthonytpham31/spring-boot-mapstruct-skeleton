@@ -8,7 +8,9 @@ import cooksys.entity.Users;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
 	
-	Users findByUserCredsName(String userName);
+	Users findByUserCredsName(String username);
 	
-	List<Users> findByDeletedUsers(Integer tracker);
+	List<Users> findByDeletedUsers(boolean tracker);
+	
+	Users findByUserCredsNameAndDeletedUsers(String username, boolean tracker);
 }

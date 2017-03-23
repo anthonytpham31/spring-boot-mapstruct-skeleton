@@ -46,7 +46,7 @@ public class Users implements BaseEntity<Long> {
 	@ManyToMany
 	private List<Tweet> userMentioned;
 	
-	private Integer deletedUsers;
+	private boolean deletedUsers;
 	
 	public Long getId() {
 		return id;
@@ -139,11 +139,11 @@ public class Users implements BaseEntity<Long> {
 		this.dateCreated = dateCreated;
 	}
 
-	public Integer getDeletedUsers() {
+	public boolean getDeletedUsers() {
 		return deletedUsers;
 	}
 
-	public void setDeletedUsers(Integer deletedUsers) {
+	public void setDeletedUsers(boolean deletedUsers) {
 		this.deletedUsers = deletedUsers;
 	}
 
