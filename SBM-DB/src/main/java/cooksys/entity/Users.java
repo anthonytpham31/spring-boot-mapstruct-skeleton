@@ -1,11 +1,14 @@
 package cooksys.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -21,13 +24,29 @@ public class Users implements BaseEntity<Long> {
 	@GeneratedValue
 	private Long id;
 	
+	@NotNull
 	private Profile userProfile;
 	
 	@Column(name = "Date Created")
 	private Timestamp timestamp;
 	
+	@NotNull
 	private Credentials userCreds;
-
+	
+	@OneToMany(mappedBy = "author")
+	private List<Tweet> userTweets;
+	
+	@ManyToMany
+	private List<Users> followingUser;
+	
+	@ManyToMany (mappedBy = "followingUser")
+	private List<Users> usersFollowed;
+	
+	@OneToMany(mappedBy = "username")
+	private List<Tweet> userMentioned;
+	
+	private boolean deletedUsers;
+	
 	public Long getId() {
 		return id;
 	}

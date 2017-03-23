@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cooksys.dto.HashTagDto;
+import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersDto;
 import cooksys.service.TweetService;
@@ -45,7 +45,7 @@ public class TweetController {
 		return tweetService.get(id);
 	}
 	
-	@PostMapping("post")
+	@PostMapping
 	@ApiOperation(value = "", nickname = "postTweet")
 	public Long post(@RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
 		Long id = tweetService.post(tweetDto);
@@ -55,8 +55,8 @@ public class TweetController {
 	
 	@DeleteMapping("{id}")
 	@ApiOperation(value = "", nickname = "deleteTweet")
-	public void delete(@PathVariable Long id, HttpServletResponse httpResponse) {
-		tweetService.delete(id);
+	public Long delete(@PathVariable Long id, HttpServletResponse httpResponse) {
+		return tweetService.delete(id);
 	}
 	
 	@PostMapping("{id}/like")
@@ -67,27 +67,49 @@ public class TweetController {
 	
 	@PostMapping("{id}/reply")
 	@ApiOperation(value = "", nickname = "replyTweet")
-	public void replyTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
-		tweetService.replyTweet(id);
+	public Long replyTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
+		return tweetService.replyTweet(id);
 	}
 	
 	@PostMapping("{id}/repost")
 	@ApiOperation(value = "", nickname = "repostTweet")
-	public void repostTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
-		tweetService.repostTweet(id);
+	public Long repostTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
+		return tweetService.repostTweet(id);
 	}
 	
 	@GetMapping("{id}/tags") // TODO needs fixing
 	@ApiOperation(value = "", nickname = "tagsInTweets")
-	public List<HashTagDto> getTagsOfTweet(Long id) {
+	public List<TagsDto> getTagsOfTweet(@PathVariable Long id) {
 		return tweetService.getTagsOfTweet(id);
 	}
 	
 	@GetMapping("{id}/likes") // TODO needs fixing
 	@ApiOperation(value = "", nickname = "likesOfTweets")
-	public List<UsersDto> getUsersOfLikes(Long id) {
+	public List<UsersDto> getUsersOfLikes(@PathVariable Long id) {
 		return tweetService.getUsersOfLikes(id);
 	}
 	
+	@GetMapping("{id}/context") // TODO
+	@ApiOperation(value = "", nickname = "tweetContext")
+	public List<TweetDto> getContext(@PathVariable Long id) {
+		return tweetService.getContext(id);
+	}
 	
+	@GetMapping("{id}/replies") //TODO
+	@ApiOperation(value = "", nickname = "tweetReplies")
+	public List<TweetDto> getTweetReplies(@PathVariable Long id) {
+		return tweetService.getTweetReplies(id);
+	}
+	
+	@GetMapping("{id}/reposts") //TODO
+	@ApiOperation(value = "", nickname = "tweetReposts")
+	public List<TweetDto> getTweetReposts(@PathVariable Long id) {
+		return tweetService.getTweetReposts(id);
+	}
+	
+	@GetMapping("{id}/mentions") //TODO
+	@ApiOperation(value = "", nickname = "tweetMentions")
+	public List<UsersDto> getTweetMentions(@PathVariable Long id) {
+		return tweetService.getTweetMentions(id);
+	}
 }
