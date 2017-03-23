@@ -29,5 +29,5 @@ public interface UsersCreationMapper {
         @Mapping(source = "username", target = "userCreds.name"),
         @Mapping(source = "password", target = "userCreds.pass")
 	})
-	Users toUsers(UsersCreationDto usersDto);
+	Users fromCreation(UsersCreationDto usersDto);
 }

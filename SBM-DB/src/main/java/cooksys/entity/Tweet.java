@@ -1,8 +1,10 @@
 package cooksys.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 
 import cooksys.entity.superclass.BaseEntity;
 
@@ -20,10 +23,10 @@ public class Tweet implements BaseEntity<Long>{
 	@GeneratedValue
 	private Long id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.ALL})
 	private Users author;
 	
-	private Timestamp posted;
+	private Date posted;
 	
 	private String content;
 	
@@ -136,12 +139,16 @@ public class Tweet implements BaseEntity<Long>{
 		return true;
 	}
 
-	public Timestamp getPosted() {
+	public Date getPosted() {
 		return posted;
 	}
 
-	public void setPosted(Timestamp posted) {
+	public void setPosted(Date posted) {
 		this.posted = posted;
 	}
 	
+	@PrePersist
+	protected void onCreate() {
+		posted = new Date();
+	}
 }

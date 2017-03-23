@@ -1,11 +1,13 @@
 package cooksys.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import cooksys.component.ServiceUtilities;
 import cooksys.component.ServiceUtilities.IdChecker;
+import cooksys.dto.DisplayDto;
 import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersDto;
@@ -35,9 +37,12 @@ public class TweetService {
 		return false;
 	}
 	
-	public static List<TweetDto> index() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TweetDto> index() {
+		return tweetRepository
+				.findAll()
+				.stream()
+				.map(tweetMapper::toTweetDto)
+				.collect(Collectors.toList());
 	}
 
 	public TweetDto get(Long id) {
@@ -45,8 +50,10 @@ public class TweetService {
 		return null;
 	}
 
-	public Long post(TweetDto tweetDto) {
-		// TODO Auto-generated method stub
+	public DisplayDto post(TweetDto tweetDto) {
+		Tweet newTweet = tweetMapper.toTweet(tweetDto);
+		// TODO Mentions & Hashtags (insert in constructor)
+		tweetRepository.saveAndFlush(newTweet);
 		return null;
 	}
 

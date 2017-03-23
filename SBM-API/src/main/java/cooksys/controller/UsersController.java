@@ -51,14 +51,14 @@ public class UsersController {
 	
 	@GetMapping("@{username}")
 	@ApiOperation(value = "", nickname = "findUser")
-	public UsersDto getUser(@PathVariable Long id) {
-		return userService.getUser(id);
+	public UsersDto getUser(@PathVariable String username) {
+		return userService.getUser(username);
 	}
 	
 	@PatchMapping("@{username}") // TODO
 	@ApiOperation(value = "", nickname = "patchUser")
-	public UsersDto patchUser(@PathVariable Long id, @RequestBody @Validated UsersCreationDto usersDto, HttpServletResponse httpResponse) {
-		UsersDto patched = userService.patchUser(id, usersDto);
+	public UsersDto patchUser(@RequestBody @Validated UsersCreationDto usersDto, HttpServletResponse httpResponse) {
+		UsersDto patched = userService.patchUser(usersDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return patched;
 	}

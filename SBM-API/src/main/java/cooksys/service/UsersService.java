@@ -48,17 +48,17 @@ public class UsersService {
 	}
 
 	public Long post(UsersCreationDto usersDto) {
-		userRepository.save(userCreationMapper.toUsers(usersDto)).setDeletedUsers(0);
-		return userRepository.saveAndFlush(userCreationMapper.toUsers(usersDto)).getId();
+		Users newUser = userCreationMapper.toUsers(usersDto);
+		newUser.setDeletedUsers(0);
+		return userRepository.saveAndFlush(newUser).getId();
 	}
 
-	public UsersDto getUser(Long id) {
-		idChecker.exists(id);
-		return userMapper.toUsersDto(userRepository.findOne(id));
+	public UsersDto getUser(String username) {
+		return userMapper.toUsersDto(userRepository.findByUserCredsName(username));
 		
 	}
 
-	public UsersDto patchUser(Long id, UsersCreationDto usersDto) {
+	public UsersDto patchUser(UsersCreationDto usersDto) {
 		// TODO Auto-generated method stub
 		return null;
 	}

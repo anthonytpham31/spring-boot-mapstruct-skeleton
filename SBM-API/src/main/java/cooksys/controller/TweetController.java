@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cooksys.dto.DisplayDto;
 import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersDto;
@@ -36,7 +37,7 @@ public class TweetController {
 	@GetMapping
 	@ApiOperation(value = "", nickname = "getAllTweets")
 	public List<TweetDto> index() {
-		return TweetService.index();
+		return tweetService.index();
 	}
 	
 	@GetMapping("{id}")
@@ -47,10 +48,11 @@ public class TweetController {
 	
 	@PostMapping
 	@ApiOperation(value = "", nickname = "postTweet")
-	public Long post(@RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
-		Long id = tweetService.post(tweetDto);
+	public DisplayDto post(@RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
+		tweetService.post(tweetDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
-		return id;
+		 
+		return null;
 	}
 	
 	@DeleteMapping("{id}")
