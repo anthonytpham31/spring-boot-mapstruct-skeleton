@@ -6,4 +6,5 @@ import cooksys.entity.Users;
 
 public interface UsersRepository extends JpaRepository<Users, Long> {
 	
+	Users findByUserCredsName(String userName);
 }

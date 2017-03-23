@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import cooksys.dto.TweetDto;
 import cooksys.entity.Tweet;
 
-@Mapper(componentModel = "spring", uses = {ReferenceMapper.class})
+@Mapper(componentModel = "spring")
 public interface TweetMapper {
 	
 	TweetDto toTweetDto(Tweet tweet);

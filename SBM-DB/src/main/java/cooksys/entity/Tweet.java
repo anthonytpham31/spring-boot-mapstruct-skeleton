@@ -1,12 +1,14 @@
 package cooksys.entity;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import cooksys.entity.superclass.BaseEntity;
@@ -21,16 +23,29 @@ public class Tweet implements BaseEntity<Long>{
 	@ManyToOne
 	private Users author;
 	
-	@Column(name = "Time Created")
 	private Timestamp posted;
 	
-	@OneToOne
-	private Tweet repostOf;
+	private String content;
 	
 	@OneToOne
 	private Tweet inReplyTo;
 	
-	private boolean deletedTweet;
+	@OneToOne
+	private Tweet repostOf;
+	
+	@OneToMany
+	private List<Users> usersLiked;
+	
+	@OneToMany
+	private List<Tweet> allReplies;
+	
+	@OneToMany
+	private List<Tweet> allReposts;
+	
+	@ManyToMany(mappedBy = "userMentioned")
+	private List<Users> usersMentionedInTweet;
+	
+	private Integer deletedTweet;
 
 	public Long getId() {
 		return id;
@@ -46,14 +61,6 @@ public class Tweet implements BaseEntity<Long>{
 
 	public void setAuthor(Users author) {
 		this.author = author;
-	}
-
-	public Timestamp getPosted() {
-		return posted;
-	}
-
-	public void setPosted(Timestamp posted) {
-		this.posted = posted;
 	}
 
 	public Tweet getRepostOf() {
@@ -72,12 +79,36 @@ public class Tweet implements BaseEntity<Long>{
 		this.inReplyTo = inReplyTo;
 	}
 	
-	public boolean isDeletedTweet() {
+	public Integer isDeletedTweet() {
 		return deletedTweet;
 	}
 
-	public void setDeletedTweet(boolean deletedTweet) {
+	public void setDeletedTweet(Integer deletedTweet) {
 		this.deletedTweet = deletedTweet;
+	}
+	
+	public List<Users> getUsersMentionedInTweet() {
+		return usersMentionedInTweet;
+	}
+
+	public void setUsersMentionedInTweet(List<Users> usersMentionedInTweet) {
+		this.usersMentionedInTweet = usersMentionedInTweet;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
+	public List<Users> getUsersLiked() {
+		return usersLiked;
+	}
+
+	public void setUsersLiked(List<Users> usersLiked) {
+		this.usersLiked = usersLiked;
 	}
 
 	@Override
@@ -103,6 +134,14 @@ public class Tweet implements BaseEntity<Long>{
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Timestamp getPosted() {
+		return posted;
+	}
+
+	public void setPosted(Timestamp posted) {
+		this.posted = posted;
 	}
 	
 }

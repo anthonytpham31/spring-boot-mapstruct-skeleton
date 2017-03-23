@@ -3,15 +3,12 @@ package cooksys.entity;
 import java.sql.Timestamp;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import cooksys.entity.embeddable.Credentials;
 import cooksys.entity.embeddable.Profile;
 import cooksys.entity.superclass.BaseEntity;
@@ -24,16 +21,13 @@ public class Users implements BaseEntity<Long> {
 	@GeneratedValue
 	private Long id;
 	
-	@NotNull
 	private Profile userProfile;
 	
-	@Column(name = "Date Created")
 	private Timestamp timestamp;
 	
-	@NotNull
 	private Credentials userCreds;
 	
-	@OneToMany(mappedBy = "author")
+	@OneToMany
 	private List<Tweet> userTweets;
 	
 	@ManyToMany
@@ -42,10 +36,10 @@ public class Users implements BaseEntity<Long> {
 	@ManyToMany (mappedBy = "followingUser")
 	private List<Users> usersFollowed;
 	
-	@OneToMany(mappedBy = "username")
+	@ManyToMany
 	private List<Tweet> userMentioned;
 	
-	private boolean deletedUsers;
+	private Integer deletedUsers;
 	
 	public Long getId() {
 		return id;
@@ -56,6 +50,62 @@ public class Users implements BaseEntity<Long> {
 		
 	}
 	
+	public Profile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(Profile userProfile) {
+		this.userProfile = userProfile;
+	}
+
+	public Credentials getUserCreds() {
+		return userCreds;
+	}
+
+	public void setUserCreds(Credentials userCreds) {
+		this.userCreds = userCreds;
+	}
+
+	public List<Tweet> getUserTweets() {
+		return userTweets;
+	}
+
+	public void setUserTweets(List<Tweet> userTweets) {
+		this.userTweets = userTweets;
+	}
+
+	public List<Users> getFollowingUser() {
+		return followingUser;
+	}
+
+	public void setFollowingUser(List<Users> followingUser) {
+		this.followingUser = followingUser;
+	}
+
+	public List<Users> getUsersFollowed() {
+		return usersFollowed;
+	}
+
+	public void setUsersFollowed(List<Users> usersFollowed) {
+		this.usersFollowed = usersFollowed;
+	}
+
+	public List<Tweet> getUserMentioned() {
+		return userMentioned;
+	}
+
+	public void setUserMentioned(List<Tweet> userMentioned) {
+		this.userMentioned = userMentioned;
+	}
+
+	public Integer isDeletedUsers() {
+		return deletedUsers;
+	}
+
+	public void setDeletedUsers(Integer deletedUsers) {
+		this.deletedUsers = deletedUsers;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -79,6 +129,14 @@ public class Users implements BaseEntity<Long> {
 		} else if (!id.equals(other.id))
 			return false;
 		return true;
+	}
+
+	public Timestamp getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	

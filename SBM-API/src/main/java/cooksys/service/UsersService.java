@@ -1,6 +1,7 @@
 package cooksys.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,10 @@ import cooksys.repository.UsersRepository;
 @Service
 public class UsersService {
 
-	UsersRepository userRepository;
-	UsersMapper userMapper;
-	ServiceUtilities serviceUtilities;
-	IdChecker idChecker;
+	private final UsersRepository userRepository;
+	private final UsersMapper userMapper;
+	private final ServiceUtilities serviceUtilities;
+	private final IdChecker idChecker;
 	
 	public UsersService(UsersRepository userRepository, UsersMapper userMapper, ServiceUtilities serviceUtilities) {
 		super();
@@ -35,8 +36,12 @@ public class UsersService {
 	}
 
 	public static List<UsersDto> index() {
-		// TODO Auto-generated method stub
 		return null;
+//		userRepository
+//				.findAll()
+//				.stream()
+//				.map(userMapper::toUsersDto)
+//				.collect(Collectors.toList());
 	}
 
 	public Long post(UsersDto usersDto) {

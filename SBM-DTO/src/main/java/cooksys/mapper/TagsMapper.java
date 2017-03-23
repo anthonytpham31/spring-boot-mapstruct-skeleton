@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import cooksys.dto.TagsDto;
 import cooksys.entity.Tags;
 
-@Mapper(componentModel = "spring", uses = {ReferenceMapper.class})
+@Mapper(componentModel = "spring")
 public interface TagsMapper {
 	
 	TagsDto toTagDto(Tags tags);

@@ -1,32 +1,40 @@
 package cooksys.entity.embeddable;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Embeddable
 public class Profile {
 	
-	private String firstName;
+	@Max(100)
+	private String first;
 	
-	private String lastName;
+	@Max(100)
+	private String last;
 	
+	@NotNull
 	private String email;
 	
-	private String phoneNumber;
+	@Min(9)
+	@Max(9)
+	private String phone;
 
-	public String getFirstName() {
-		return firstName;
+	public String getFirst() {
+		return first;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFirst(String first) {
+		this.first = first;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getLast() {
+		return last;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLast(String last) {
+		this.last = last;
 	}
 
 	public String getEmail() {
@@ -37,56 +45,15 @@ public class Profile {
 		this.email = email;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Profile other = (Profile) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (phoneNumber == null) {
-			if (other.phoneNumber != null)
-				return false;
-		} else if (!phoneNumber.equals(other.phoneNumber))
-			return false;
-		return true;
-	}
+	
 	
 	
 }
