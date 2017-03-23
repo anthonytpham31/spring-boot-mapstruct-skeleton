@@ -58,7 +58,7 @@ public class UsersController {
 	
 	@PatchMapping("@{username}") // TODO
 	@ApiOperation(value = "", nickname = "patchUser")
-	public UsersDto patchUser(@RequestBody @Validated Credentials cred, Profile prof, HttpServletResponse httpResponse) {
+	public UsersDto patchUser(@RequestBody @Validated Credentials cred, @RequestBody Profile prof, HttpServletResponse httpResponse) {
 		UsersDto patched = userService.patchUser(cred, prof);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return patched;
