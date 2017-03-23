@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cooksys.dto.TweetDto;
+import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
+import cooksys.entity.Users;
 import cooksys.service.UsersService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -41,7 +43,7 @@ public class UsersController {
 	
 	@PostMapping
 	@ApiOperation(value = "", nickname = "postUser")
-	public Long post(@RequestBody UsersDto usersDto, HttpServletResponse httpResponse) {
+	public Long post(@RequestBody UsersCreationDto usersDto, HttpServletResponse httpResponse) {
 		Long id = userService.post(usersDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return id;
@@ -49,16 +51,16 @@ public class UsersController {
 	
 	@GetMapping("@{username}")
 	@ApiOperation(value = "", nickname = "findUser")
-	public Long getUser(@PathVariable Long id) {
+	public UsersDto getUser(@PathVariable Long id) {
 		return userService.getUser(id);
 	}
 	
 	@PatchMapping("@{username}") // TODO
 	@ApiOperation(value = "", nickname = "patchUser")
-	public Long patchUser(@RequestBody @Validated UsersDto usersDto, HttpServletResponse httpResponse) {
-		Long id = userService.patchUser(usersDto);
+	public UsersDto patchUser(@PathVariable Long id, @RequestBody @Validated UsersCreationDto usersDto, HttpServletResponse httpResponse) {
+		UsersDto patched = userService.patchUser(id, usersDto);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
-		return id;
+		return patched;
 	}
 	
 	@DeleteMapping("@{username}") //TODO

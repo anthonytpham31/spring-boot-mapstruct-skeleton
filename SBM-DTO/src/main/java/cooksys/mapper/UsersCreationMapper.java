@@ -4,11 +4,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
+import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
 import cooksys.entity.Users;
 
 @Mapper(componentModel = "spring", uses = {CredentialsMapper.class})
-public interface UsersMapper {
+public interface UsersCreationMapper {
 	
 	@Mappings({
         @Mapping(source = "userProfile.first", target = "firstName"),
@@ -16,9 +17,9 @@ public interface UsersMapper {
         @Mapping(source = "userProfile.mail", target = "email"),
         @Mapping(source = "userProfile.phone", target = "phoneNumber"),
         @Mapping(source = "userCreds.name", target = "username"),
-        @Mapping(source = "dateCreated", target = "created")
+        @Mapping(source = "userCreds.pass", target = "password")
 	})
-	UsersDto toUsersDto(Users users);
+	UsersCreationDto toUsersCreationDto(Users users);
 	
 	@Mappings({
         @Mapping(source = "firstName", target = "userProfile.first"),
@@ -26,7 +27,7 @@ public interface UsersMapper {
         @Mapping(source = "email", target = "userProfile.mail"),
         @Mapping(source = "phoneNumber", target = "userProfile.phone"),
         @Mapping(source = "username", target = "userCreds.name"),
-        @Mapping(target = "dateCreated")
+        @Mapping(source = "password", target = "userCreds.pass")
 	})
-	Users toUsers(UsersDto usersDto);
+	Users toUsers(UsersCreationDto usersDto);
 }

@@ -1,21 +1,24 @@
 package cooksys.dto;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import javax.validation.constraints.NotNull;
 
-public class UsersDto {
+
+public class UsersCreationDto {
 	
+	@NotNull
 	private String username;
+	
+	@NotNull
+	private String password;
 	
 	private String firstName;
 	
 	private String lastName;
 	
+	@NotNull
 	private String email;
 	
 	private String phoneNumber;
-	
-	private Date created;
 
 	public String getUsername() {
 		return username;
@@ -23,6 +26,14 @@ public class UsersDto {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getFirstName() {
@@ -64,6 +75,7 @@ public class UsersDto {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -77,7 +89,7 @@ public class UsersDto {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UsersDto other = (UsersDto) obj;
+		UsersCreationDto other = (UsersCreationDto) obj;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -93,6 +105,11 @@ public class UsersDto {
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
 		if (phoneNumber == null) {
 			if (other.phoneNumber != null)
 				return false;
@@ -105,14 +122,5 @@ public class UsersDto {
 			return false;
 		return true;
 	}
-
-	public Date getCreated() {
-		return created;
-	}
-
-	public void setCreated(Date created) {
-		this.created = created;
-	}
-	
 	
 }

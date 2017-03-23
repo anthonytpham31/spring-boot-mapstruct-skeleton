@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import cooksys.component.ServiceUtilities;
 import cooksys.component.ServiceUtilities.IdChecker;
 import cooksys.dto.TweetDto;
+import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
 import cooksys.entity.Users;
+import cooksys.mapper.UsersCreationMapper;
 import cooksys.mapper.UsersMapper;
 import cooksys.repository.UsersRepository;
 
@@ -18,13 +20,15 @@ public class UsersService {
 
 	private final UsersRepository userRepository;
 	private final UsersMapper userMapper;
+	private final UsersCreationMapper userCreationMapper;
 	private final ServiceUtilities serviceUtilities;
 	private final IdChecker idChecker;
 	
-	public UsersService(UsersRepository userRepository, UsersMapper userMapper, ServiceUtilities serviceUtilities) {
+	public UsersService(UsersRepository userRepository, UsersMapper userMapper, UsersCreationMapper userCreationMapper, ServiceUtilities serviceUtilities) {
 		super();
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
+		this.userCreationMapper = userCreationMapper;
 		this.serviceUtilities = serviceUtilities;
 		this.idChecker = serviceUtilities.buildIdChecker(Users.class, this::has);
 	}
@@ -37,22 +41,24 @@ public class UsersService {
 
 	public List<UsersDto> index() {
 		return userRepository
-				.findAll()
+				.findByDeletedUsers(0)
 				.stream()
 				.map(userMapper::toUsersDto)
 				.collect(Collectors.toList());
 	}
 
-	public Long post(UsersDto usersDto) {
-		return userRepository.save(userMapper.toUsers(usersDto)).getId();
+	public Long post(UsersCreationDto usersDto) {
+		userRepository.save(userCreationMapper.toUsers(usersDto)).setDeletedUsers(0);
+		return userRepository.saveAndFlush(userCreationMapper.toUsers(usersDto)).getId();
 	}
 
-	public Long getUser(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public UsersDto getUser(Long id) {
+		idChecker.exists(id);
+		return userMapper.toUsersDto(userRepository.findOne(id));
+		
 	}
 
-	public Long patchUser(UsersDto usersDto) {
+	public UsersDto patchUser(Long id, UsersCreationDto usersDto) {
 		// TODO Auto-generated method stub
 		return null;
 	}

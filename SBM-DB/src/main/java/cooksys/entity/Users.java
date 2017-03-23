@@ -1,6 +1,7 @@
 package cooksys.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,8 +30,7 @@ public class Users implements BaseEntity<Long> {
 	
 	private Profile userProfile;
 	
-	@CreationTimestamp
-	private Timestamp timestamp;
+	private Date dateCreated;
 	
 	private Credentials userCreds;
 	
@@ -103,14 +105,6 @@ public class Users implements BaseEntity<Long> {
 		this.userMentioned = userMentioned;
 	}
 
-	public Integer isDeletedUsers() {
-		return deletedUsers;
-	}
-
-	public void setDeletedUsers(Integer deletedUsers) {
-		this.deletedUsers = deletedUsers;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -135,14 +129,27 @@ public class Users implements BaseEntity<Long> {
 			return false;
 		return true;
 	}
-
-	public Timestamp getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(Timestamp timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	
+	
+	public Date getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated = dateCreated;
+	}
+
+	public Integer getDeletedUsers() {
+		return deletedUsers;
+	}
+
+	public void setDeletedUsers(Integer deletedUsers) {
+		this.deletedUsers = deletedUsers;
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		dateCreated = new Date();
+	}
+
 }
