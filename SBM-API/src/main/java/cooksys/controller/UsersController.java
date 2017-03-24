@@ -85,20 +85,20 @@ public class UsersController {
 	
 	@GetMapping("@{username}/feed") //TODO
 	@ApiOperation(value = "", nickname = "UserFeed")
-	public List<TweetDto> getUserFeed(@PathVariable UsersDto userDto) {
-		return userService.getUserFeed(userDto);
+	public List<TweetDto> getUserFeed(@PathVariable String username) {
+		return userService.getUserFeed(username);
 	}
 	
 	@GetMapping("@{username}/tweets") //TODO
 	@ApiOperation(value = "", nickname = "UserTweets")
-	public List<TweetDto> getUserTweets(@PathVariable UsersDto userDto) {
-		return userService.getUserTweets(userDto);
+	public List<TweetDto> getUserTweets(@PathVariable String username) {
+		return userService.getUserTweets(username);
 	}
 	
 	@GetMapping("@{username}/mentions") //TODO
 	@ApiOperation(value = "", nickname = "UserMentions")
-	public List<TweetDto> getUserMentions(@PathVariable UsersDto userDto) {
-		return userService.getUserMentions(userDto);
+	public List<TweetDto> getUserMentions(@PathVariable String username) {
+		return userService.getUserMentions(username);
 	}
 	
 	@GetMapping("@{username}/followers") 

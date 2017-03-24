@@ -3,23 +3,30 @@ package cooksys.service;
 import org.springframework.stereotype.Service;
 
 import cooksys.entity.Users;
+import cooksys.repository.TagsRepository;
 import cooksys.repository.TweetRepository;
 import cooksys.repository.UsersRepository;
 
 @Service
 public class ValidateService {
 	
+	TagsRepository tagRepository; 
 	TweetRepository tweetRepository;
 	UsersRepository userRepository;
 	
-	public ValidateService(TweetRepository tweetRepository, UsersRepository userRepository) {
+	public ValidateService(TagsRepository tagRepository, TweetRepository tweetRepository, UsersRepository userRepository) {
 		super();
 		this.tweetRepository = tweetRepository;
 		this.userRepository = userRepository;
+		this.tagRepository = tagRepository;
 	}
 	
 	public boolean checkTag(String label) {
-		return false; //TODO
+		if(tagRepository.findByLabel(label) != null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public boolean checkUserExist(String username) {

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 
 import cooksys.entity.superclass.BaseEntity;
@@ -25,7 +25,7 @@ public class Tags implements BaseEntity<Long>{
 	
 	private Timestamp lastUsed;
 	
-	@OneToMany(mappedBy = "label")
+	@ManyToMany
 	private List<Tweet> tweetedTags;
 
 	public Long getId() {

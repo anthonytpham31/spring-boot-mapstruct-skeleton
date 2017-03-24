@@ -48,6 +48,9 @@ public class Tweet implements BaseEntity<Long>{
 	@ManyToMany(mappedBy = "userMentioned")
 	private List<Users> usersMentionedInTweet;
 	
+	@ManyToMany(mappedBy = "tweetedTags")
+	private List<Tags> allTags;
+	
 	private boolean deletedTweet;
 
 	public Long getId() {
@@ -166,5 +169,13 @@ public class Tweet implements BaseEntity<Long>{
 	@PrePersist
 	protected void onCreate() {
 		posted = new Date();
+	}
+
+	public List<Tags> getAllTags() {
+		return allTags;
+	}
+
+	public void setAllTags(List<Tags> allTags) {
+		this.allTags = allTags;
 	}
 }

@@ -10,9 +10,11 @@ import cooksys.dto.CredentialsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
+import cooksys.entity.Tweet;
 import cooksys.entity.Users;
 import cooksys.entity.embeddable.Credentials;
 import cooksys.entity.embeddable.Profile;
+import cooksys.mapper.TweetMapper;
 import cooksys.mapper.UsersMapper;
 import cooksys.repository.UsersRepository;
 
@@ -22,13 +24,15 @@ public class UsersService {
 	private final ValidateService valid;
 	private final UsersRepository userRepository;
 	private final UsersMapper userMapper;
+	private final TweetMapper tweetMapper;
 	
 	
-	public UsersService(ValidateService valid, UsersRepository userRepository, UsersMapper userMapper) {
+	public UsersService(TweetMapper tweetMapper, ValidateService valid, UsersRepository userRepository, UsersMapper userMapper) {
 		super();
 		this.valid = valid;
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
+		this.tweetMapper = tweetMapper;
 	}
 
 	public boolean has(Long id) {
@@ -96,21 +100,32 @@ public class UsersService {
 		}	
 	}
 
-	public List<TweetDto> getUserFeed(UsersDto userDto) {
+	public List<TweetDto> getUserFeed(String username) {
 		return null;
 		// TODO Auto-generated method stub
 		
 	}
 
-	public List<TweetDto> getUserTweets(UsersDto userDto) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<TweetDto> getUserTweets(String username) {
+		Users user = userRepository.findByUserCredsName(username);
+		List<TweetDto> tweetList = new ArrayList<>();
+		List<Tweet> userTweetList = user.getUserTweets();
+		for(Tweet tweet : userTweetList) {
+			tweetList.add(tweetMapper.toTweetDto(tweet));
+		}
 		
+		return tweetList;
 	}
 
-	public List<TweetDto> getUserMentions(UsersDto userDto) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<TweetDto> getUserMentions(String username) {
+		Users user = userRepository.findByUserCredsName(username);
+		List<TweetDto> tweetList = new ArrayList<>();
+		List<Tweet> userTweetList = user.getUserMentioned();
+		for(Tweet tweet : userTweetList) {
+			tweetList.add(tweetMapper.toTweetDto(tweet));
+		}
+		
+		return tweetList;
 		
 	}
 

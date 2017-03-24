@@ -1,5 +1,6 @@
 package cooksys.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,23 +59,27 @@ public class TweetService {
 		newTweet.setDeletedTweet(false);
 		
 		String[] parts = tweetDto.getContent().split(" ");
+		Tags newLabel = new Tags();
+		String username = new String();
 		
 		for(String words : parts) {
-			Tags newLabel = new Tags();
-			String username = new String();
+			
 			
 			if(words.charAt(0) == '#') {
 				newLabel.setLabel(words.substring(1));
-				
-				tagRepository.saveAndFlush(newLabel);
+				System.out.println(newLabel.getLabel());
+				tagRepository.save(newLabel);
 				
 			} else if (words.charAt(0) == '@') {
 				username = words.substring(1);
+				System.out.println(username);
 				Users mentioned = userRepository.findByUserCredsName(username);
-				newTweet.getUsersMentionedInTweet().add(mentioned);
-				if(mentioned != null) {
+				System.out.println(username);
+				System.out.println(mentioned);
+				if(mentioned != null && newTweet.getUsersMentionedInTweet() != null) {
+					newTweet.getUsersMentionedInTweet().add(mentioned);
 					mentioned.getUserMentioned().add(newTweet);
-					userRepository.saveAndFlush(mentioned);
+					userRepository.save(mentioned);
 				}		
 			}
 		}
@@ -109,17 +114,18 @@ public class TweetService {
 			Tags newLabel = new Tags();
 			String username = new String();
 			
-			if(words.charAt(0) == '@') {
+			if(words.charAt(0) == '#') {
 				newLabel.setLabel(words.substring(1));
-				tagRepository.saveAndFlush(newLabel);
+				newLabel.getTweetedTags().add(newTweet);
+				tagRepository.save(newLabel);
 				
-			} else if (words.charAt(0) == '#') {
+			} else if (words.charAt(0) == '@') {
 				username = words.substring(1);
 				Users mentioned = userRepository.findByUserCredsName(username);
 				
 				if(mentioned != null) {
 					mentioned.getUserMentioned().add(newTweet);
-					userRepository.saveAndFlush(mentioned);
+					userRepository.save(mentioned);
 				}		
 			}
 		}
@@ -143,8 +149,13 @@ public class TweetService {
 	}
 
 	public List<UsersDto> getUsersOfLikes(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Tweet noLongerThinknStraight = tweetRepository.findOne(id);
+		List<Users> usersLiked = noLongerThinknStraight.getUsersLiked();
+		List<UsersDto> userDisp = new ArrayList<>();
+		for(Users user : usersLiked) {
+			userDisp.add(userMapper.toUsersDto(user));
+		}
+		return userDisp;
 	}
 
 	public List<TweetDto> getContext(Long id) {
