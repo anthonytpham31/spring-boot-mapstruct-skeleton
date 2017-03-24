@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,12 +30,12 @@ public class TagsController {
 	@GetMapping
 	@ApiOperation(value = "", nickname = "getTags")
 	public List<TagsDto> index() {
-		return TagsService.index();
+		return tagsService.index();
 	}
 	
 	@GetMapping("{label}")
 	@ApiOperation(value = "", nickname = "getTweetsOfTag")
-	public List<TweetDto> getTweetsWTag(TagsDto tag) {
-		return tagsService.getTweetsWTag(tag);
+	public List<TweetDto> getTweetsWTag(@PathVariable String label) {
+		return tagsService.getTweetsWTag(label);
 	}
 }

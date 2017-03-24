@@ -1,12 +1,11 @@
 package cooksys.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import cooksys.component.ServiceUtilities;
-import cooksys.component.ServiceUtilities.IdChecker;
 import cooksys.dto.CredentialsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersCreationDto;
@@ -19,20 +18,19 @@ import cooksys.repository.UsersRepository;
 
 @Service
 public class UsersService {
-
+	
+	private final ValidateService valid;
 	private final UsersRepository userRepository;
 	private final UsersMapper userMapper;
-	private final ServiceUtilities serviceUtilities;
-	private final IdChecker idChecker;
 	
-	public UsersService(UsersRepository userRepository, UsersMapper userMapper, ServiceUtilities serviceUtilities) {
+	
+	public UsersService(ValidateService valid, UsersRepository userRepository, UsersMapper userMapper) {
 		super();
+		this.valid = valid;
 		this.userRepository = userRepository;
 		this.userMapper = userMapper;
-		this.serviceUtilities = serviceUtilities;
-		this.idChecker = serviceUtilities.buildIdChecker(Users.class, this::has);
 	}
-	
+
 	public boolean has(Long id) {
 		if(id != null)
 			return userRepository.exists(id);
@@ -58,9 +56,9 @@ public class UsersService {
 		
 	}
 
-	public UsersDto patchUser(Credentials creds, Profile profile) {
+	public UsersDto patchUser(CredentialsDto creds, Profile profile) {
 		
-		Users newUser = userRepository.findByUserCredsName(creds.getName());
+		Users newUser = userRepository.findByUserCredsName(creds.getUsername());
 		if(newUser != null){
 			newUser.setUserProfile(profile);
 			return userMapper.toUsersDto(userRepository.saveAndFlush(newUser));
@@ -76,14 +74,26 @@ public class UsersService {
 		return userMapper.toUsersDto(userRepository.saveAndFlush(newUser));
 	}
 
-	public void followUser(UsersDto userDto) {
-		// TODO Auto-generated method stub
+	public void followUser(Credentials cred, String username) {
 		
+		Users followingUser = userRepository.findByUserCredsName(cred.getName());
+		Users userFollowed = userRepository.findByUserCredsName(username);
+		
+		if(followingUser != null && valid.checkUserExist(username)) {
+			followingUser.getUsersFollowed().add(userFollowed);
+			userFollowed.getFollowingUser().add(followingUser);
+		}
 	}
 
-	public void unfollowUser(UsersDto userDto) {
-		// TODO Auto-generated method stub
+	public void unfollowUser(Credentials cred, String username) {
 		
+		Users followingUser = userRepository.findByUserCredsName(cred.getName());
+		Users userFollowed = userRepository.findByUserCredsName(username);
+		
+		if(followingUser != null && valid.checkUserExist(username)) {
+			followingUser.getUsersFollowed().remove(userFollowed);
+			userFollowed.getFollowingUser().remove(followingUser);
+		}	
 	}
 
 	public List<TweetDto> getUserFeed(UsersDto userDto) {
@@ -104,16 +114,30 @@ public class UsersService {
 		
 	}
 
-	public List<UsersDto> getUserFollowers(UsersDto userDto) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<UsersDto> getUserFollowers(String username) {
 		
+		Users userList = userRepository.findByUserCredsName(username);
+		List<Users> list = userList.getFollowingUser();
+		List<UsersDto> addedList = new ArrayList<>();
+		for(Users user : list) {
+			if(!user.getDeletedUsers()){
+				addedList.add(userMapper.toUsersDto(user));
+			}
+		}
+		return addedList;
 	}
 
-	public List<UsersDto> getUserFollowing(UsersDto userDto) {
-		return null;
-		// TODO Auto-generated method stub
+	public List<UsersDto> getUserFollowing(String username) {
 		
+		Users userList = userRepository.findByUserCredsName(username);
+		List<Users> list = userList.getUsersFollowed();
+		List<UsersDto> addedList = new ArrayList<>();
+		for(Users user : list) {
+			if(!user.getDeletedUsers()){
+				addedList.add(userMapper.toUsersDto(user));
+			}
+		}
+		return addedList;
 	}
 	
 }

@@ -1,14 +1,12 @@
 package cooksys.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import cooksys.component.ServiceUtilities;
-import cooksys.component.ServiceUtilities.IdChecker;
 import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
-import cooksys.entity.Tags;
 import cooksys.mapper.TagsMapper;
 import cooksys.repository.TagsRepository;
 
@@ -18,31 +16,22 @@ public class TagsService {
 	// Probably will have to import tweets to add to tags as well as users
 	TagsRepository tagRepository;
 	TagsMapper tagMapper;
-	ServiceUtilities serviceUtilities;
-	IdChecker idChecker;
 	
-	public TagsService(TagsRepository tagRepository, TagsMapper tagMapper, ServiceUtilities serviceUtilities) {
-		super();
+	public TagsService(TagsRepository tagRepository, TagsMapper tagMapper){
 		this.tagRepository = tagRepository;
 		this.tagMapper = tagMapper;
-		this.serviceUtilities = serviceUtilities;
-		this.idChecker = serviceUtilities.buildIdChecker(Tags.class, this::has);
-	}
-	
-	public boolean has(Long id) {
-		if(id != null)
-			return tagRepository.exists(id);
-		return false;
 	}
 
-	public static List<TagsDto> index() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TagsDto> index() {
+		return tagRepository
+				.findAll()
+				.stream()
+				.map(tagMapper::toTagDto)
+				.collect(Collectors.toList());
 	}
 
-	public List<TweetDto> getTweetsWTag(TagsDto tag) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TweetDto> getTweetsWTag(String label) {
+		return null; 
 	}
 	
 	

@@ -5,38 +5,41 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import cooksys.component.ServiceUtilities;
-import cooksys.component.ServiceUtilities.IdChecker;
 import cooksys.dto.DisplayDto;
+import cooksys.dto.ReplyDto;
+import cooksys.dto.RepostDto;
 import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersDto;
+import cooksys.entity.Tags;
 import cooksys.entity.Tweet;
+import cooksys.entity.Users;
+import cooksys.entity.embeddable.Credentials;
 import cooksys.mapper.TweetMapper;
+import cooksys.mapper.UsersMapper;
+import cooksys.repository.TagsRepository;
 import cooksys.repository.TweetRepository;
+import cooksys.repository.UsersRepository;
 
 @Service
 public class TweetService {
-
+	
+	TagsRepository tagRepository;
+	UsersRepository userRepository;
 	TweetRepository tweetRepository;
 	TweetMapper tweetMapper;
-	ServiceUtilities serviceUtilities;
-	IdChecker idChecker;
+	UsersMapper userMapper;
 	
-	public TweetService(TweetRepository tweetRepository, TweetMapper tweetMapper, ServiceUtilities serviceUtilities) {
+	public TweetService(TagsRepository tagRepository, UsersRepository userRepository, TweetRepository tweetRepository,
+			TweetMapper tweetMapper, UsersMapper userMapper) {
 		super();
+		this.tagRepository = tagRepository;
+		this.userRepository = userRepository;
 		this.tweetRepository = tweetRepository;
 		this.tweetMapper = tweetMapper;
-		this.serviceUtilities = serviceUtilities;
-		this.idChecker = serviceUtilities.buildIdChecker(Tweet.class, this::has);
+		this.userMapper = userMapper;
 	}
-	
-	public boolean has(Long id) {
-		if(id != null)
-			return tweetRepository.exists(id);
-		return false;
-	}
-	
+
 	public List<DisplayDto> index() {
 		return tweetRepository
 				.findByDeletedTweet(false)
@@ -50,9 +53,31 @@ public class TweetService {
 	}
 
 	public DisplayDto post(TweetDto tweetDto) {
+		
 		Tweet newTweet = tweetMapper.toTweet(tweetDto);
 		newTweet.setDeletedTweet(false);
-		// TODO Mentions & Hashtags (insert in constructor)
+		
+		String[] parts = tweetDto.getContent().split(" ");
+		
+		for(String words : parts) {
+			Tags newLabel = new Tags();
+			String username = new String();
+			
+			if(words.charAt(0) == '#') {
+				newLabel.setLabel(words.substring(1));
+				
+				tagRepository.saveAndFlush(newLabel);
+				
+			} else if (words.charAt(0) == '@') {
+				username = words.substring(1);
+				Users mentioned = userRepository.findByUserCredsName(username);
+				newTweet.getUsersMentionedInTweet().add(mentioned);
+				if(mentioned != null) {
+					mentioned.getUserMentioned().add(newTweet);
+					userRepository.saveAndFlush(mentioned);
+				}		
+			}
+		}
 		return tweetMapper.toDisplayDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
@@ -63,22 +88,53 @@ public class TweetService {
 
 	}
 
-	public void likeTweet(Long id) {
-		// TODO Auto-generated method stub
-		// Redo variables
+	public void likeTweet(Long id, Credentials cred) {
+		Users likedUser = userRepository.findByUserCredsName(cred.getName());
+		Tweet likedTweet = tweetRepository.findOne(id);
+		likedTweet.getUsersLiked().add(likedUser);
 		
 	}
 
-	public Long replyTweet(Long id) {
-		return null;
-		// TODO Auto-generated method stub
-		// Redo variables
+	public ReplyDto replyTweet(Long id, TweetDto tweetDto) {
+		
+		Tweet oldTweet = tweetRepository.findOne(id);
+		Tweet newTweet = tweetMapper.toTweet(tweetDto);
+		newTweet.setInReplyTo(oldTweet);
+		oldTweet.getAllReplies().add(newTweet);
+		tweetRepository.saveAndFlush(oldTweet);
+		
+		String[] parts = tweetDto.getContent().split(" ");
+		
+		for(String words : parts) {
+			Tags newLabel = new Tags();
+			String username = new String();
+			
+			if(words.charAt(0) == '@') {
+				newLabel.setLabel(words.substring(1));
+				tagRepository.saveAndFlush(newLabel);
+				
+			} else if (words.charAt(0) == '#') {
+				username = words.substring(1);
+				Users mentioned = userRepository.findByUserCredsName(username);
+				
+				if(mentioned != null) {
+					mentioned.getUserMentioned().add(newTweet);
+					userRepository.saveAndFlush(mentioned);
+				}		
+			}
+		}
+		
+		return tweetMapper.toReplyDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
-	public Long repostTweet(Long id) {
-		return null;
-		// TODO Auto-generated method stub
-		// Redo variables
+	public RepostDto repostTweet(Long id, TweetDto tweetDto) {
+		
+		Tweet oldTweet = tweetRepository.findOne(id);
+		Tweet newTweet = tweetMapper.toTweet(tweetDto);
+		newTweet.setRepostOf(oldTweet);
+		oldTweet.getAllReposts().add(oldTweet);
+		tweetRepository.saveAndFlush(oldTweet);
+		return tweetMapper.toRepostDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
 	public List<TagsDto> getTagsOfTweet(Long id) {

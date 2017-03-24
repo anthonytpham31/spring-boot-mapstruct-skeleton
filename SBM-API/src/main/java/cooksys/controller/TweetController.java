@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import cooksys.dto.DisplayDto;
+import cooksys.dto.ReplyDto;
+import cooksys.dto.RepostDto;
 import cooksys.dto.TagsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersDto;
+import cooksys.entity.embeddable.Credentials;
 import cooksys.service.TweetService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,20 +65,20 @@ public class TweetController {
 	
 	@PostMapping("{id}/like")
 	@ApiOperation(value = "", nickname = "likeTweet")
-	public void likeTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
-		tweetService.likeTweet(id);
+	public void likeTweet(@PathVariable Long id, @RequestBody @Validated Credentials cred, HttpServletResponse httpResponse) {
+		tweetService.likeTweet(id, cred);
 	}
 	
 	@PostMapping("{id}/reply")
 	@ApiOperation(value = "", nickname = "replyTweet")
-	public Long replyTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
-		return tweetService.replyTweet(id);
+	public ReplyDto replyTweet(@PathVariable Long id, @RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
+		return tweetService.replyTweet(id, tweetDto);
 	}
 	
 	@PostMapping("{id}/repost")
 	@ApiOperation(value = "", nickname = "repostTweet")
-	public Long repostTweet(@PathVariable Long id, HttpServletResponse httpResponse) {
-		return tweetService.repostTweet(id);
+	public RepostDto repostTweet(@PathVariable Long id, @RequestBody @Validated TweetDto tweetDto, HttpServletResponse httpResponse) {
+		return tweetService.repostTweet(id, tweetDto);
 	}
 	
 	@GetMapping("{id}/tags") // TODO needs fixing

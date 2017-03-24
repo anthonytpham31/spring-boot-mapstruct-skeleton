@@ -37,9 +37,12 @@ public class Users implements BaseEntity<Long> {
 	@OneToMany
 	private List<Tweet> userTweets;
 	
+	// Notes for self
+	// list of users following this user 
 	@ManyToMany
 	private List<Users> followingUser;
 	
+	// list of users this user follows
 	@ManyToMany (mappedBy = "followingUser")
 	private List<Users> usersFollowed;
 	

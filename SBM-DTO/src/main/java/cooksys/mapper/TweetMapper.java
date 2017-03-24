@@ -51,20 +51,21 @@ public interface TweetMapper {
 	// ReplyDto
 	
 	@Mappings({
-		@Mapping(source = "id", target = "reply.id"),
-		@Mapping(source = "author", target = "reply.author"),
-		//@Mapping(source = "posted", target = "reply.posted"),
-		@Mapping(source = "content", target = "reply.content")
+		@Mapping(source = "id", target = "id"),
+		@Mapping(source = "author", target = "author"),
+		@Mapping(source = "posted", target = "timestamp"),
+		@Mapping(source = "content", target = "content"),
+		@Mapping(source = "inReplyTo", target = "reply")
 	})
 	ReplyDto toReplyDto(Tweet tweet);
 	
 	// RepostDto
 	
 	@Mappings({
-		@Mapping(source = "id", target = "repost.id"),
-		@Mapping(source = "author", target = "repost.author"),
-		//@Mapping(source = "posted", target = "repost.posted"),
-		@Mapping(source = "content", target = "repost.content")
+		@Mapping(source = "id", target = "id"),
+		@Mapping(source = "author", target = "author"),
+		@Mapping(source = "posted", target = "timestamp"),
+		@Mapping(source = "repostOf", target = "repost")
 	})
 	RepostDto toRepostDto(Tweet tweet);
 }

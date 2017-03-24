@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cooksys.dto.CredentialsDto;
 import cooksys.dto.TweetDto;
 import cooksys.dto.UsersCreationDto;
 import cooksys.dto.UsersDto;
@@ -56,30 +57,30 @@ public class UsersController {
 		return userService.getUser(username);
 	}
 	
-	@PatchMapping("@{username}") // TODO
+	@PatchMapping("@{username}") 
 	@ApiOperation(value = "", nickname = "patchUser")
-	public UsersDto patchUser(@RequestBody @Validated Credentials cred, @RequestBody Profile prof, HttpServletResponse httpResponse) {
+	public UsersDto patchUser(@RequestBody @Validated CredentialsDto cred, @RequestBody Profile prof, HttpServletResponse httpResponse) {
 		UsersDto patched = userService.patchUser(cred, prof);
 		httpResponse.setStatus(HttpServletResponse.SC_CREATED);
 		return patched;
 	}
 	
-	@DeleteMapping("@{username}") //TODO
+	@DeleteMapping("@{username}") 
 	@ApiOperation(value = "", nickname = "deleteUser")
 	public UsersDto delete(@PathVariable String username, HttpServletResponse httpResponse) {
 		return userService.delete(username);
 	}
 	
-	@PostMapping("@{username}/follow") //TODO
+	@PostMapping("@{username}/follow") 
 	@ApiOperation(value = "", nickname = "followUser")
-	public void followUser(@PathVariable @Validated UsersDto userDto, HttpServletResponse httpResponse) {
-		userService.followUser(userDto);
+	public void followUser(@RequestBody @Validated Credentials cred, @PathVariable String username, HttpServletResponse httpResponse) {
+		userService.followUser(cred, username);
 	}
 	
-	@PostMapping("@{username}/unfollow") //TODO
+	@PostMapping("@{username}/unfollow") 
 	@ApiOperation(value = "", nickname = "unfollowUser")
-	public void unfollowUser(@PathVariable @Validated UsersDto userDto, HttpServletResponse httpResponse) {
-		userService.unfollowUser(userDto);
+	public void unfollowUser(@RequestBody @Validated Credentials cred, @PathVariable String username, HttpServletResponse httpResponse) {
+		userService.unfollowUser(cred, username);
 	}
 	
 	@GetMapping("@{username}/feed") //TODO
@@ -100,15 +101,15 @@ public class UsersController {
 		return userService.getUserMentions(userDto);
 	}
 	
-	@GetMapping("@{username}/followers") //TODO
+	@GetMapping("@{username}/followers") 
 	@ApiOperation(value = "", nickname = "Userfollowers")
-	public List<UsersDto> getUserFollowers(@PathVariable UsersDto userDto) {
-		return userService.getUserFollowers(userDto);
+	public List<UsersDto> getUserFollowers(@PathVariable String username) {
+		return userService.getUserFollowers(username);
 	}
 	
-	@GetMapping("@{username}/following") //TODO
+	@GetMapping("@{username}/following") 
 	@ApiOperation(value = "", nickname = "UserFollowing")
-	public List<UsersDto> getUserFollowing(@PathVariable UsersDto userDto) {
-		return userService.getUserFollowing(userDto);
+	public List<UsersDto> getUserFollowing(@PathVariable String username) {
+		return userService.getUserFollowing(username);
 	}
 }
