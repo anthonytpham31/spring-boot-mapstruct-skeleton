@@ -174,8 +174,15 @@ public class TweetService {
 	}
 
 	public List<UsersDto> getTweetMentions(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Tweet tweetMention = tweetRepository.findOne(id);
+		List<UsersDto> tweetList = new ArrayList<>();
+		List<Users> userTweetList = tweetMention.getUsersMentionedInTweet();
+		for(Users user : userTweetList) {
+			tweetList.add(userMapper.toUsersDto(user));
+		}
+		
+		return tweetList;
+		
 	}
 
 }
