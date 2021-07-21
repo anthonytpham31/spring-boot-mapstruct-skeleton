@@ -21,6 +21,7 @@ import cooksys.mapper.UsersMapper;
 import cooksys.repository.TagsRepository;
 import cooksys.repository.TweetRepository;
 import cooksys.repository.UsersRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TweetService {
@@ -53,6 +54,7 @@ public class TweetService {
 		return tweetMapper.toDisplayDto(tweetRepository.findOne(id));
 	}
 
+	@Transactional
 	public DisplayDto post(TweetDto tweetDto) {
 		
 		Tweet newTweet = tweetMapper.toTweet(tweetDto);
@@ -86,6 +88,7 @@ public class TweetService {
 		return tweetMapper.toDisplayDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
+	@Transactional
 	public DisplayDto delete(Long id) {
 		Tweet newTweet = tweetRepository.findOne(id);
 		newTweet.setDeletedTweet(true);
@@ -100,6 +103,7 @@ public class TweetService {
 		
 	}
 
+	@Transactional
 	public ReplyDto replyTweet(Long id, TweetDto tweetDto) {
 		
 		Tweet oldTweet = tweetRepository.findOne(id);
@@ -133,6 +137,7 @@ public class TweetService {
 		return tweetMapper.toReplyDto(tweetRepository.saveAndFlush(newTweet));
 	}
 
+	@Transactional
 	public RepostDto repostTweet(Long id, TweetDto tweetDto) {
 		
 		Tweet oldTweet = tweetRepository.findOne(id);
